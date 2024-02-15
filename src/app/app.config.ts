@@ -8,6 +8,8 @@ import { reducerDestinosViajes } from './states/destinos-viajes/destinos-viajes.
 import { provideEffects } from '@ngrx/effects';
 import { DestinosViajesEffects } from './states/destinos-viajes/destinos-viajes.effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { AuthService } from './services/auth.service';
+import { UsuarioLogueadoGuard } from './guards/usuario-logueado/usuario-logueado.guard';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +18,8 @@ export const appConfig: ApplicationConfig = {
     provideStore(),
     provideState({ name: 'destinos', reducer: reducerDestinosViajes }),
     provideEffects(DestinosViajesEffects),
-    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    AuthService,
+    UsuarioLogueadoGuard
 ]
 };

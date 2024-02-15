@@ -1,15 +1,15 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { DestinoViajeComponent } from '../destino-viaje/destino-viaje.component';
-import { DestinoViaje } from '../models/destino-viaje.model';
+import { DestinoViaje } from '../../models/destino-viaje.model';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { FormDestinoViajeComponent } from "../form-destino-viaje/form-destino-viaje.component";
-import { DestinosApiClient } from '../models/destinos-api-client.model';
+import { DestinosApiClient } from '../../models/destinos-api-client.model';
 import { Store } from '@ngrx/store';
-import { AppState } from '../states/app.state';
-import { ElegidoFavoritoAction, NuevoDestinoAction } from '../states/destinos-viajes/destinos-viajes.actions';
+import { AppState } from '../../states/app.state';
+import { ElegidoFavoritoAction, NuevoDestinoAction } from '../../states/destinos-viajes/destinos-viajes.actions';
 import { Observable } from 'rxjs';
-import { DestinosViajesState } from '../states/destinos-viajes/destinos-viajes.reducer';
-import { selectFavorito, selectItems } from '../states/destinos-viajes/destinos-viajes.selector';
+import { DestinosViajesState } from '../../states/destinos-viajes/destinos-viajes.reducer';
+import { selectFavorito, selectItems } from '../../states/destinos-viajes/destinos-viajes.selector';
 
 @Component({
     selector: 'app-lista-destinos',

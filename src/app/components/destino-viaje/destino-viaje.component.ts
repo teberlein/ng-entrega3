@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, HostBinding, EventEmitter, Output, input} from '@angular/core';
-import { DestinoViaje } from '../models/destino-viaje.model';
+import { DestinoViaje } from '../../models/destino-viaje.model';
 import { ThisReceiver } from '@angular/compiler';
 import { CommonModule, NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AppState } from '../states/app.state';
-import { VoteDownAction, VoteResetAction, VoteUpAction } from '../states/destinos-viajes/destinos-viajes.actions';
+import { AppState } from '../../states/app.state';
+import { VoteDownAction, VoteResetAction, VoteUpAction } from '../../states/destinos-viajes/destinos-viajes.actions';
 
 @Component({
   selector: 'app-destino-viaje',

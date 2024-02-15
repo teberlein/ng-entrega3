@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { DestinoViajeComponent } from './destino-viaje/destino-viaje.component';
-import { ListaDestinosComponent } from './lista-destinos/lista-destinos.component';
+import { DestinoViajeComponent } from './components/destino-viaje/destino-viaje.component';
+import { ListaDestinosComponent } from './components/lista-destinos/lista-destinos.component';
 import { CommonModule, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DestinoViaje } from './models/destino-viaje.model';
