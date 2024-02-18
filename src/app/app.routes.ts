@@ -4,6 +4,17 @@ import { DestinoDetalleComponent } from './components/destino-detalle/destino-de
 import { LoginComponent } from './components/login/login.component';
 import { ProtectedComponent } from './components/protected/protected.component';
 import { UsuarioLogueadoGuard } from './guards/usuario-logueado/usuario-logueado.guard';
+import { VuelosMainComponentComponent } from './components/vuelos/vuelos-main-component/vuelos-main-component.component';
+import { VuelosDetalleComponent } from './components/vuelos/vuelos-detalle-component/vuelos-detalle-component.component';
+import { VuelosComponentComponent } from './components/vuelos/vuelos-component/vuelos-component.component';
+import { VuelosMasInfoComponentComponent } from './components/vuelos/vuelos-mas-info-component/vuelos-mas-info-component.component';
+
+export const childrenRoutesVuelos: Routes = [
+  { path: '', redirectTo: 'main', pathMatch: 'full' },
+  { path: 'main', component: VuelosMainComponentComponent },
+  { path: 'mas-info', component: VuelosMasInfoComponentComponent },
+  { path: ':id', component: VuelosDetalleComponent },
+]
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -15,4 +26,10 @@ export const routes: Routes = [
       component: ProtectedComponent,
       canActivate: [ UsuarioLogueadoGuard ]
     },
+    {
+      path: 'vuelos',
+      component: VuelosComponentComponent,
+      canActivate: [ UsuarioLogueadoGuard ],
+      children: childrenRoutesVuelos
+    }
 ];
