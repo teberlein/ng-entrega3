@@ -6,11 +6,12 @@ import { CommonModule, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DestinoViaje } from './models/destino-viaje.model';
 import { Observable } from 'rxjs';
+import { ReservasModule } from './reservas/reservas.module';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, DestinoViajeComponent, CommonModule, RouterLink, RouterLinkActive, FormsModule, ReactiveFormsModule, NgIf],
+  imports: [RouterOutlet, DestinoViajeComponent, CommonModule, RouterLink, RouterLinkActive, FormsModule, ReactiveFormsModule, NgIf, ReservasModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

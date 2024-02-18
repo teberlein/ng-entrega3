@@ -8,6 +8,8 @@ import { VuelosMainComponentComponent } from './components/vuelos/vuelos-main-co
 import { VuelosDetalleComponent } from './components/vuelos/vuelos-detalle-component/vuelos-detalle-component.component';
 import { VuelosComponentComponent } from './components/vuelos/vuelos-component/vuelos-component.component';
 import { VuelosMasInfoComponentComponent } from './components/vuelos/vuelos-mas-info-component/vuelos-mas-info-component.component';
+import { ReservasListadoComponent } from './reservas/reservas-listado/reservas-listado.component';
+import { ReservasDetalleComponent } from './reservas/reservas-detalle/reservas-detalle.component';
 
 export const childrenRoutesVuelos: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
@@ -31,5 +33,7 @@ export const routes: Routes = [
       component: VuelosComponentComponent,
       canActivate: [ UsuarioLogueadoGuard ],
       children: childrenRoutesVuelos
-    }
+    },
+    { path: 'reservas',  component: ReservasListadoComponent },
+    { path: 'reservas/:id',  component: ReservasDetalleComponent }
 ];
