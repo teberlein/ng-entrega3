@@ -1,4 +1,4 @@
-import { ApplicationConfig, isDevMode } from '@angular/core';
+import { ApplicationConfig, InjectionToken, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { DestinosApiClient } from './models/destinos-api-client.model'
 
@@ -11,6 +11,16 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { AuthService } from './services/auth.service';
 import { UsuarioLogueadoGuard } from './guards/usuario-logueado/usuario-logueado.guard';
 
+// app config
+export interface AppConfig {
+  apiEndpoint: String;
+}
+const APP_CONFIG_VALUE: AppConfig = {
+  apiEndpoint: 'http://localhost:3000'
+};
+export const APP_CONFIG = new InjectionToken<AppConfig>('app.config');
+// fin app config
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
@@ -19,6 +29,7 @@ export const appConfig: ApplicationConfig = {
     provideEffects(DestinosViajesEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     AuthService,
-    UsuarioLogueadoGuard
+    UsuarioLogueadoGuard,
+    { provide: APP_CONFIG, useValue: APP_CONFIG_VALUE }
 ]
 };
