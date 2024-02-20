@@ -14,7 +14,6 @@ import { UsuarioLogueadoGuard } from './guards/usuario-logueado/usuario-logueado
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    DestinosApiClient,
     provideStore(),
     provideState({ name: 'destinos', reducer: reducerDestinosViajes }),
     provideEffects(DestinosViajesEffects),

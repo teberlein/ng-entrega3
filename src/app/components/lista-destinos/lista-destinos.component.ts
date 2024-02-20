@@ -16,8 +16,9 @@ import { selectFavorito, selectItems } from '../../states/destinos-viajes/destin
     standalone: true,
     templateUrl: './lista-destinos.component.html',
     styleUrl: './lista-destinos.component.css',
-    imports: [DestinoViajeComponent, CommonModule, FormDestinoViajeComponent, AsyncPipe]
-})
+    imports: [DestinoViajeComponent, CommonModule, FormDestinoViajeComponent, AsyncPipe],
+    providers: [DestinosApiClient]
+  })
 
 export class ListaDestinosComponent implements OnInit{
   @Output() onItemAdded: EventEmitter<DestinoViaje>;
