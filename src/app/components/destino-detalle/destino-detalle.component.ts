@@ -1,15 +1,7 @@
-import { Component, Inject, InjectionToken } from '@angular/core';
+import { Component, Inject, InjectionToken, OnInit } from '@angular/core';
 import { DestinosApiClient } from '../../models/destinos-api-client.model';
 import { DestinoViaje } from '../../models/destino-viaje.model';
 import { ActivatedRoute } from '@angular/router';
-import { DestinosApiClientDecorated, APP_CONFIG, APP_CONFIG_VALUE } from '../../models/destinos-api-client-decorated.model';
-
-class DestinosApiClientViejo { 
-  public getById(id: String | null): DestinoViaje | null{
-    console.log('llamando por la clase vieja')
-    return null;
-  }
-}
 
 @Component({
   selector: 'app-destino-detalle',
@@ -18,15 +10,13 @@ class DestinosApiClientViejo {
   templateUrl: './destino-detalle.component.html',
   styleUrl: './destino-detalle.component.css',
   providers: [
-    { provide: DestinosApiClient, useClass: DestinosApiClientDecorated },
-    { provide: DestinosApiClientViejo, useExisting: DestinosApiClient },
-    { provide: APP_CONFIG, useValue: APP_CONFIG_VALUE }
+    DestinosApiClient
   ] 
 })
-export class DestinoDetalleComponent {
+export class DestinoDetalleComponent implements OnInit{
   destino: DestinoViaje | null;
 
-  constructor (private route: ActivatedRoute, private destinosApiClient: DestinosApiClientViejo) {
+  constructor(private route: ActivatedRoute, private destinosApiClient: DestinosApiClient) {
     this.destino = null;
   }
 

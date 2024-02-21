@@ -23,11 +23,10 @@ import { selectFavorito, selectItems } from '../../states/destinos-viajes/destin
 export class ListaDestinosComponent implements OnInit{
   @Output() onItemAdded: EventEmitter<DestinoViaje>;
   updates: string[];
-  destinos: DestinoViaje[];
   constructor( private destinosApiClient:DestinosApiClient, private store: Store<AppState>) {
     this.onItemAdded = new EventEmitter;
     this.updates = [];
-    this.destinos = this.destinosApiClient.getAll(),
+    this.getDestinos();
     store.select(state => state.destinos.favorito)
       .subscribe(d => {
         if (d != null) {
@@ -35,6 +34,8 @@ export class ListaDestinosComponent implements OnInit{
         }
       })
   }
+  nombredestinos:string[] = [];
+  destinos: DestinoViaje[] = [];
 
   ngOnInit(): void {
       
@@ -54,6 +55,7 @@ export class ListaDestinosComponent implements OnInit{
     }}));
     this.destinosApiClient.add(d);
     this.onItemAdded.emit(d);
+    this.destinos.push(d);
     console.log('se ha agregado el destino ' + d.nombre);
   }
 
@@ -72,4 +74,15 @@ export class ListaDestinosComponent implements OnInit{
      }}));
      console.log('se ha elegido el destino ' + e.nombre);
     }
+
+    async getDestinos() {
+      this.nombredestinos = await this.destinosApiClient.getDestinos();
+      this.nombresToDestinos();
+    }
+
+    nombresToDestinos() {
+      for (let i = 0; i < this.nombredestinos.length; i++ ) {
+        this.destinos.push(new DestinoViaje(this.nombredestinos[i],'',false))
+      }
+    } 
 }

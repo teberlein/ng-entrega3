@@ -44,4 +44,10 @@ export const initialState: DestinosViajesState = {
         destino.voteReset()
         return({...state})
     }),
+    on(DestinosViajesActions.InitMyDataAction, (state, { destinos }) => {
+        return({
+            ...state,
+            items: destinos.map((d) => new DestinoViaje(d, '',true))
+        })
+    }),
 )

@@ -1,15 +1,18 @@
-import { ApplicationConfig, InjectionToken, isDevMode } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, Injectable, InjectionToken, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { DestinosApiClient } from './models/destinos-api-client.model'
 
 import { routes } from './app.routes';
-import { provideState, provideStore } from '@ngrx/store';
+import { Store, provideState, provideStore } from '@ngrx/store';
 import { reducerDestinosViajes } from './states/destinos-viajes/destinos-viajes.reducer';
 import { provideEffects } from '@ngrx/effects';
 import { DestinosViajesEffects } from './states/destinos-viajes/destinos-viajes.effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { AuthService } from './services/auth.service';
 import { UsuarioLogueadoGuard } from './guards/usuario-logueado/usuario-logueado.guard';
+import { HttpClientModule, HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
+import { AppState } from './states/app.state';
+import { InitMyDataAction } from './states/destinos-viajes/destinos-viajes.actions';
 
 // app config
 export interface AppConfig {
@@ -21,6 +24,23 @@ const APP_CONFIG_VALUE: AppConfig = {
 export const APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 // fin app config
 
+/* // app init
+export function init_app(appLoadService: AppLoadService): () => Promise<any>  {
+  return () => appLoadService.intializeDestinosViajesState();
+}
+
+@Injectable()
+class AppLoadService {
+  constructor(private store: Store<AppState>, private http: HttpClient) { }
+  async intializeDestinosViajesState(): Promise<any> {
+    const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
+    const req = new HttpRequest('GET', APP_CONFIG_VALUE.apiEndpoint + '/my', { headers: headers });
+    const response: any = await this.http.request(req).toPromise();
+    this.store.dispatch(InitMyDataAction(response.body));
+  }
+}
+// fin app init */
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
@@ -30,6 +50,8 @@ export const appConfig: ApplicationConfig = {
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     AuthService,
     UsuarioLogueadoGuard,
-    { provide: APP_CONFIG, useValue: APP_CONFIG_VALUE }
-]
+    { provide: APP_CONFIG, useValue: APP_CONFIG_VALUE },
+/*     AppLoadService,
+    { provide: APP_INITIALIZER, useFactory: init_app, deps: [AppLoadService], multi: true } */
+  ]
 };
