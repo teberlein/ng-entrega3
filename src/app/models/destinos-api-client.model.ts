@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../states/app.state';
 import { ElegidoFavoritoAction, NuevoDestinoAction } from '../states/destinos-viajes/destinos-viajes.actions';
 import { Inject, Injectable, forwardRef } from '@angular/core';
-import { APP_CONFIG, AppConfig } from '../app.config';
+import { APP_CONFIG, AppConfig, db } from '../app.config';
 import { HttpClient, HttpHeaders, HttpRequest, HttpResponse, HttpEvent } from '@angular/common/http';
 
 @Injectable()
@@ -38,6 +38,10 @@ export class DestinosApiClient {
 				}}));
 
 				this.destinos.push(d);
+				const myDb = db;
+				myDb.destinos.add(d);
+				console.log('todos los destinos de la db!');
+				myDb.destinos.toArray().then(destinos => console.log(destinos))
 			  }
 		}});
 	  }

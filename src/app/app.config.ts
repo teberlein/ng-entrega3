@@ -13,6 +13,8 @@ import { UsuarioLogueadoGuard } from './guards/usuario-logueado/usuario-logueado
 import { HttpClientModule, HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { AppState } from './states/app.state';
 import { InitMyDataAction } from './states/destinos-viajes/destinos-viajes.actions';
+import Dexie from 'dexie';
+import { DestinoViaje } from './models/destino-viaje.model';
 
 // app config
 export interface AppConfig {
@@ -41,6 +43,23 @@ class AppLoadService {
 }
 // fin app init */
 
+//dexie db
+@Injectable({
+  providedIn: 'root'
+})
+export class MyDatabase extends Dexie {
+  destinos!: Dexie.Table<DestinoViaje, number>;
+  constructor () {
+      super('MyDatabase');
+      this.version(1).stores({
+        destinos: '++id, nombre, imagenUrl',
+      });
+  }
+}
+
+export const db = new MyDatabase();
+// fin dexie db
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
@@ -53,5 +72,6 @@ export const appConfig: ApplicationConfig = {
     { provide: APP_CONFIG, useValue: APP_CONFIG_VALUE },
 /*     AppLoadService,
     { provide: APP_INITIALIZER, useFactory: init_app, deps: [AppLoadService], multi: true } */
+    MyDatabase
   ]
 };
