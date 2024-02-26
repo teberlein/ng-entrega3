@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ApplicationConfig, Injectable, InjectionToken, isDevMode } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, Injectable, InjectionToken, importProvidersFrom, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { DestinosApiClient } from './models/destinos-api-client.model'
 
@@ -15,6 +15,9 @@ import { AppState } from './states/app.state';
 import { InitMyDataAction } from './states/destinos-viajes/destinos-viajes.actions';
 import Dexie from 'dexie';
 import { DestinoViaje } from './models/destino-viaje.model';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { Observable, flatMap, from } from 'rxjs';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 // app config
 export interface AppConfig {
@@ -43,22 +46,69 @@ class AppLoadService {
 }
 // fin app init */
 
-//dexie db
+// dexie db
+export class Translation {
+  constructor(public id: number, public lang: string, public key: string, public value: string) {}
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class MyDatabase extends Dexie {
   destinos!: Dexie.Table<DestinoViaje, number>;
+  translations!: Dexie.Table<Translation, number>;
   constructor () {
       super('MyDatabase');
       this.version(1).stores({
+        destinos: '++id, nombre, imagenUrl'
+      });
+      this.version(2).stores({
         destinos: '++id, nombre, imagenUrl',
+        translations: '++id, lang, key, value'
       });
   }
 }
 
 export const db = new MyDatabase();
 // fin dexie db
+
+// i18n ini
+class TranslationLoader implements TranslateLoader {
+  constructor(private http: HttpClient) { }
+
+  getTranslation(lang: string): Observable<any> {
+    const promise = db.translations
+    .where('lang')
+    .equals(lang)
+    .toArray()
+    .then(results => {
+      if (results.length === 0) {
+        return this.http
+        .get<Translation[]>(APP_CONFIG_VALUE.apiEndpoint + '/api/translation?lang=' + lang)
+        .toPromise()
+        .then(apiResults => {
+          db.translations.bulkAdd(apiResults!);
+          return apiResults;
+        });
+      }
+      return results;
+    }).then((traducciones) => {
+      console.log('traducciones cargadas:');
+      console.log(traducciones);
+      return traducciones;
+    }).then((traducciones) => {
+      return traducciones!.map((t) => ({ [t.key]: t.value}));
+    });
+   return from(promise).pipe(flatMap((elems) => from(elems)));
+  }
+}
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
+// fin i18n
+
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -70,8 +120,18 @@ export const appConfig: ApplicationConfig = {
     AuthService,
     UsuarioLogueadoGuard,
     { provide: APP_CONFIG, useValue: APP_CONFIG_VALUE },
-/*     AppLoadService,
-    { provide: APP_INITIALIZER, useFactory: init_app, deps: [AppLoadService], multi: true } */
-    MyDatabase
+/*      AppLoadService,
+    { provide: APP_INITIALIZER, useFactory: init_app, deps: [AppLoadService], multi: true }, */
+    MyDatabase,
+    importProvidersFrom(HttpClientModule),
+    importProvidersFrom(
+      TranslateModule.forRoot({
+        loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient],
+        }
+      })
+    )
   ]
 };
